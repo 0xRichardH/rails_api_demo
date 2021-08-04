@@ -3,6 +3,7 @@ require "test_helper"
 class UserTest < ActiveSupport::TestCase
   context "associations" do
     should have_many :posts
+    should have_many :comments
   end
 
   context "validations" do

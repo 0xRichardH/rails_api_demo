@@ -3,6 +3,7 @@ require "test_helper"
 class PostTest < ActiveSupport::TestCase
   context "associations" do
     should belong_to(:author).class_name("User")
+    should have_many(:comments).dependent(:destroy)
   end
 
   context "validations" do
