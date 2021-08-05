@@ -1,24 +1,23 @@
-# README
+### Routes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```bash
+rails routes
+```
 
-Things you may want to cover:
+![](routes.png)
 
-* Ruby version
+### Test
 
-* System dependencies
+```bash
+rails test
+```
 
-* Configuration
+![](test.png)
 
-* Database creation
+### API Test
 
-* Database initialization
+- login
+![](login.png)
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- retrive posts
+![](posts.png)
