@@ -1,9 +1,16 @@
 require "test_helper"
 
 class PostsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = User.create name: "Richard", email: "test@email.com", password: "password"
+    @auth_tokens = @user.create_new_auth_token
+    @post = posts(:one)
+    @post.update(author: @user)
+  end
+
   context "GET #index" do
     setup do
-      get posts_path
+      get posts_path, headers: @auth_tokens
     end
 
     should "response successfully" do
@@ -20,21 +27,18 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   context "GET #show" do
     setup do
-      @post = posts(:one)
-
-      get post_path(id: @post.id)
+      get post_path(id: @post.id), headers: @auth_tokens
     end
 
     should "response successfully" do
       assert_response :success
-      assert_equal @post.to_json(include: :author), response.body
     end
   end
 
   context "POST #create" do
     should "created successfully" do
       assert_difference "Post.count", 1 do
-        post posts_path, params: { post: { title: "test", body: "test", user_id: users(:two).id } }
+        post posts_path, params: { post: { title: "test", body: "test" } }, headers: @auth_tokens
       end
 
       body = JSON.parse response.body
@@ -48,7 +52,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     should "created failed" do
       assert_no_difference "Post.count" do
-        post posts_path, params: { post: { title: "test", body: "test", user_id: nil } }
+        post posts_path, params: { post: { title: "test", body: nil } }, headers: @auth_tokens
       end
 
       body = JSON.parse(response.body)
@@ -56,14 +60,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       assert_response :unprocessable_entity
       assert_equal ["success", "errors"], body.keys
       assert_equal false, body["success"]
-      assert_equal ["Author must exist"], body["errors"]
+      assert_equal ["Body can't be blank"], body["errors"]
     end
   end
 
   context "PUT #update" do
     should "update successfully" do
       assert_no_difference "Post.count" do
-        put post_path(id: posts(:one)), params: { post: { title: "abc", body: "abcdef" } }
+        put post_path(id: posts(:one)), params: { post: { title: "abc", body: "abcdef" } }, headers: @auth_tokens
       end
 
       body = JSON.parse response.body
@@ -77,7 +81,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
     should "update failed" do
       assert_no_difference "Post.count" do
-        put post_path(id: posts(:one).id), params: { post: { title: "abc", body: "abcdef", user_id: nil } }
+        put post_path(id: @post.id), params: { post: { title: "abc", body: nil } }, headers: @auth_tokens
       end
 
       body = JSON.parse response.body
@@ -85,14 +89,14 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       assert_response :unprocessable_entity
       assert_equal ["success", "errors"], body.keys
       assert_equal false, body["success"]
-      assert_equal ["Author must exist"], body["errors"]
+      assert_equal ["Body can't be blank"], body["errors"]
     end
   end
 
   context "DELETE #destroy" do
     should "destroyed successfully" do
       assert_difference "Post.count", -1 do
-        delete post_path(id: posts(:one))
+        delete post_path(id: @post.id), headers: @auth_tokens
       end
 
       assert_response :success

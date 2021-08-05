@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = Post.new post_params
+    post = current_user.posts.build post_params
 
     if post.save
       render json: { success: true, post: post.to_json(include: :author) }
@@ -40,10 +40,10 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = current_user.posts.find(params[:id])
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :user_id)
+    params.require(:post).permit(:title, :body)
   end
 end

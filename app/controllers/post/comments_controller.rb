@@ -9,21 +9,12 @@ class Post::CommentsController < ApplicationController
 
   def create
     comment = @post.comments.build comment_params
+    comment.user = current_user
 
     if comment.save
       render json: { success: true, comment: comment.to_json(include: :user) }
     else
       render json: { success: false, errors: comment.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    comment = @post.comments.find(params[:id])
-
-    if comment.destroy
-      render json: { success: true }
-    else
-      render json: { success: false }
     end
   end
 
@@ -34,6 +25,6 @@ class Post::CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:body, :user_id)
+    params.require(:comment).permit(:body)
   end
 end
