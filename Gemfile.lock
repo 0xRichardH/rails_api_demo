@@ -87,6 +87,7 @@ GEM
     nokogiri (1.12.1)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    pagy (4.10.1)
     puma (5.4.0)
       nio4r (~> 2.0)
     racc (1.5.2)
@@ -148,6 +149,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   listen (~> 3.3)
+  pagy (~> 4.10, >= 4.10.1)
   puma (~> 5.0)
   rails (~> 6.1.4)
   shoulda-context (~> 2.0)
