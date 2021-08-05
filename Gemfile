@@ -19,7 +19,9 @@ gem 'puma', '~> 5.0'
 # https://github.com/ddnexus/pagy
 gem 'pagy', '~> 4.10', '>= 4.10.1'
 
-
+# Token based authentication for Rails JSON APIs
+# https://github.com/lynndylanhurley/devise_token_auth
+gem 'devise_token_auth'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

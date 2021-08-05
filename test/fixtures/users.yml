@@ -3,7 +3,11 @@
 one:
   name: MyString
   email: MyString@mail.com
+  encrypted_password: <%= User.new.send(:password_digest, "MyPassword") %>
+  uid: 1
 
 two:
   name: MyString
   email: myString@gmail.com
+  encrypted_password: <%= User.new.send(:password_digest, "MyPassword") %>
+  uid: 2
