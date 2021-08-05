@@ -1,0 +1,34 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: CI/CD
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.3
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+    - name: Setup test database
+      run: |
+        bin/rails db:setup
+
+    - name: Run tests
+      run: bundle exec rails test
