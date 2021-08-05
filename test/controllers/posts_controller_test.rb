@@ -96,7 +96,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_response :success
-      assert_equal response.body, { success: true }.to_json
+      assert_equal({ success: true }.to_json, response.body)
     end
   end
 end
